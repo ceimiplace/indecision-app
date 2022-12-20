@@ -33,5 +33,13 @@ let challenge = (
     <p>Location - {user.location}</p>
   </div>
 );
+const multiplier = {
+  numbers: [12, 3, 4],
+  multiplyBy: 4,
+  returnMultiplied() {
+    return this.numbers.map((elem) => this.multiplyBy * elem);
+  },
+};
+console.log(multiplier.returnMultiplied());
 const root = ReactDOM.createRoot(document.querySelector("#root"));
 root.render(template);
