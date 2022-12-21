@@ -40,6 +40,40 @@ const multiplier = {
     return this.numbers.map((elem) => this.multiplyBy * elem);
   },
 };
-console.log(multiplier.returnMultiplied());
+let counter = 0;
+const addOne = () => {
+  console.log("Add one");
+  counter++;
+  reRenderComponent();
+};
+const minusOne = () => {
+  counter--;
+  console.log("minus One");
+  reRenderComponent();
+};
+const resetCount = () => {
+  counter = 0;
+  console.log("reset");
+  reRenderComponent();
+};
+const templateTwo = (
+  <div>
+    <p>Count is {counter}</p>
+    <button onClick={addOne}>+1</button>
+    <button onClick={minusOne}>-1</button>
+    <button onClick={resetCount}>Reset</button>
+  </div>
+);
+function reRenderComponent() {
+  const templateTwo = (
+    <div>
+      <p>Count is {counter}</p>
+      <button onClick={addOne}>+1</button>
+      <button onClick={minusOne}>-1</button>
+      <button onClick={resetCount}>Reset</button>
+    </div>
+  );
+  root.render(templateTwo);
+}
 const root = ReactDOM.createRoot(document.querySelector("#root"));
-root.render(template);
+root.render(templateTwo);
