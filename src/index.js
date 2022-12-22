@@ -7,7 +7,7 @@ const appInfo = {
   subtitle: "This is some app info",
   options: ["one", "two"],
 };
-let template = (
+const template = (
   <div>
     <h1>{appInfo.title}</h1>
     {appInfo.subtitle && <p>{appInfo.subtitle}</p>}
@@ -26,12 +26,18 @@ let template = (
   </div>
 );
 const user = { name: "Azamfire Denis", age: 28, location: "Botosnai" };
-let challenge = (
+const challenge = (
   <div>
     <h1>{user.name}</h1>
     {user.age && <p>Age- {user.age}</p>}
     <p>Location - {user.location}</p>
   </div>
 );
+function getName(a, b) {
+  console.log(arguments);
+  console.log(a, b);
+  console.log(arguments[2]);
+}
+getName("denis", "azamfire", "bibi");
 const root = ReactDOM.createRoot(document.querySelector("#root"));
 root.render(template);
