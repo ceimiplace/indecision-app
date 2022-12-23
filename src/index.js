@@ -41,8 +41,12 @@ class Action extends React.Component {
   }
 }
 class Options extends React.Component {
+  constructor(props) {
+    super(props);
+    this.removeAll = this.removeAll.bind(this);
+  }
   removeAll() {
-    alert("hello");
+    console.log(this.props);
   }
   render() {
     return (
@@ -77,6 +81,37 @@ class AddOption extends React.Component {
     );
   }
 }
-
+class Counter extends React.Component {
+  constructor(props) {
+    super(props);
+    this.addOne = this.addOne.bind(this);
+    this.removeOne = this.removeOne.bind(this);
+    this.resetCounter = this.resetCounter.bind(this);
+    this.state = { counter: 0 };
+  }
+  addOne() {
+    this.setState((previous) => {
+      return { counter: previous.counter + 1 };
+    });
+  }
+  removeOne() {
+    this.setState((previousState) => {
+      return { counter: previousState.counter - 1 };
+    });
+  }
+  resetCounter() {
+    console.log("resetted counter");
+  }
+  render() {
+    return (
+      <div>
+        <h1>Counter {this.state.counter}</h1>
+        <button onClick={this.addOne}>+1</button>
+        <button onClick={this.removeOne}>-1</button>
+        <button onClick={this.resetCounter}>reset</button>
+      </div>
+    );
+  }
+}
 const root = ReactDOM.createRoot(document.querySelector("#root"));
-root.render(<IndecisionApp />);
+root.render(<Counter />);
