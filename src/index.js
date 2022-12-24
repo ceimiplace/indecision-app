@@ -11,6 +11,12 @@ class IndecisionApp extends React.Component {
     this.removeAllOptions = this.removeAllOptions.bind(this);
     this.handlePick = this.handlePick.bind(this);
     this.addOption = this.addOption.bind(this);
+    this.removeOption = this.removeOption.bind(this);
+  }
+  removeOption(option) {
+    this.setState((prevState) => {
+      return { options: prevState.options.filter((elem) => elem !== option) };
+    });
   }
   addOption(option) {
     if (!option) {
@@ -18,16 +24,14 @@ class IndecisionApp extends React.Component {
     } else if (this.state.options.indexOf(option) > -1) {
       return "Please enter something new ";
     }
-    this.setState((prev) => {
-      return {
-        options: prev.options.concat(option),
-      };
-    });
+    this.setState((prev) => ({
+      options: prev.options.concat(option),
+    }));
   }
   removeAllOptions() {
-    this.setState(() => {
-      return { options: [] };
-    });
+    this.setState(() => ({
+      options: [],
+    }));
   }
   handlePick() {
     let random = Math.floor(Math.random() * this.state.options.length);
@@ -39,7 +43,7 @@ class IndecisionApp extends React.Component {
 
     return (
       <div>
-        <Header title={title} subtitle={subtitle} />
+        <Header subtitle={subtitle} />
         <Action
           disabled={this.state.options.length <= 0}
           handlePick={this.handlePick}
@@ -47,6 +51,7 @@ class IndecisionApp extends React.Component {
         <Options
           options={this.state.options}
           removeAllOptions={this.removeAllOptions}
+          removeOption={this.removeOption}
         />
         <AddOption addOption={this.addOption} />
       </div>
@@ -61,7 +66,7 @@ const Header = (props) => {
     </header>
   );
 };
-
+Header.defaultProps = { title: "Indecision" };
 const Action = (props) => {
   return (
     <div>
@@ -77,14 +82,25 @@ const Options = (props) => {
     <div>
       <button onClick={props.removeAllOptions}>Remove all</button>
       {props.options.map((elem) => (
-        <Option key={elem} optionText={elem} />
+        <Option
+          key={elem}
+          optionText={elem}
+          removeOption={props.removeOption}
+        />
       ))}
     </div>
   );
 };
 
 const Option = (props) => {
-  return <p>{props.optionText}</p>;
+  return (
+    <div>
+      <p>{props.optionText}</p>
+      <button onClick={() => props.removeOption(props.optionText)}>
+        Remove
+      </button>
+    </div>
+  );
 };
 
 class AddOption extends React.Component {
@@ -99,13 +115,11 @@ class AddOption extends React.Component {
 
     let errorMessage = this.props.addOption(value);
     if (errorMessage) {
-      this.setState((prev) => {
-        return { error: errorMessage };
-      });
+      this.setState(() => ({
+        error: errorMessage,
+      }));
     } else {
-      this.setState(() => {
-        return { error: null };
-      });
+      this.setState(() => ({ error: null }));
     }
     e.target.elements.option.value = "";
   }
@@ -120,8 +134,6 @@ class AddOption extends React.Component {
   }
 }
 
-const root = ReactDOM.createRoot(document.querySelector("#root"));
-root.render(<IndecisionApp />);
 ///////////////////////////
 class Counter extends React.Component {
   constructor(props) {
@@ -129,7 +141,7 @@ class Counter extends React.Component {
     this.addOne = this.addOne.bind(this);
     this.removeOne = this.removeOne.bind(this);
     this.resetCounter = this.resetCounter.bind(this);
-    this.state = { counter: 0 };
+    this.state = { counter: props.counter };
   }
   addOne() {
     this.setState((previous) => {
@@ -157,6 +169,8 @@ class Counter extends React.Component {
     );
   }
 }
+Counter.defaultProps = { counter: 0 };
+/////////////////////////////
 class Visiblity extends React.Component {
   constructor(props) {
     super(props);
@@ -164,9 +178,9 @@ class Visiblity extends React.Component {
     this.state = { visibility: true };
   }
   toggleVisibility() {
-    this.setState((prev) => {
-      return { visibility: !prev.visibility };
-    });
+    this.setState((prev) => ({
+      visibility: !prev.visibility,
+    }));
   }
   render() {
     return (
@@ -180,3 +194,5 @@ class Visiblity extends React.Component {
     );
   }
 }
+const root = ReactDOM.createRoot(document.querySelector("#root"));
+root.render(<IndecisionApp />);
