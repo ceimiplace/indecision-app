@@ -100,7 +100,9 @@ class Counter extends React.Component {
     });
   }
   resetCounter() {
-    console.log("resetted counter");
+    this.setState(() => {
+      return { counter: 0 };
+    });
   }
   render() {
     return (
@@ -113,5 +115,28 @@ class Counter extends React.Component {
     );
   }
 }
+class Visiblity extends React.Component {
+  constructor(props) {
+    super(props);
+    this.toggleVisibility = this.toggleVisibility.bind(this);
+    this.state = { visibility: true };
+  }
+  toggleVisibility() {
+    this.setState((prev) => {
+      return { visibility: !prev.visibility };
+    });
+  }
+  render() {
+    return (
+      <div>
+        <h1>Visibility toggle</h1>
+        <button onClick={this.toggleVisibility}>
+          {this.state.visibility ? "Show details" : "Hide details"}
+        </button>
+        {this.state.visibility ? <p>Here are some details</p> : null}
+      </div>
+    );
+  }
+}
 const root = ReactDOM.createRoot(document.querySelector("#root"));
-root.render(<Counter />);
+root.render(<Visiblity />);
