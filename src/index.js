@@ -1,16 +1,11 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import "./styles/index.scss";
-import App from "./App";
-import OptionalModal from "./OptionalModal";
-import Header from "./Header";
-import Action from "./Action";
-import Options from "./Options";
-import AddOption from "./AddOption";
 import IndecisionApp from "./App";
 const root = ReactDOM.createRoot(document.querySelector("#root"));
 root.render(<IndecisionApp />);
 ///////////////////////////
+
 class Counter extends React.Component {
   constructor(props) {
     super(props);
