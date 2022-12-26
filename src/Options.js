@@ -2,7 +2,7 @@ import Option from "./Option";
 const Options = (props) => {
   return (
     <div>
-      <button onClick={props.removeAllOptions} className="red">
+      <button className="button button--link" onClick={props.removeAllOptions}>
         Remove all
       </button>
       {props.options.map((elem) => (
