@@ -1,18 +1,37 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import "./index.css";
+import "./styles/index.scss";
 import App from "./App";
+import OptionalModal from "./OptionalModal";
 class IndecisionApp extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       options: ["Item one", "item two", "Thiord option", "Item four"],
+      selectedOption: false,
     };
     this.removeAllOptions = this.removeAllOptions.bind(this);
     this.handlePick = this.handlePick.bind(this);
     this.addOption = this.addOption.bind(this);
     this.removeOption = this.removeOption.bind(this);
+    this.closeModal = this.closeModal.bind(this);
   }
+  closeModal() {
+    this.setState(() => ({ selectedOption: undefined }));
+  }
+  componentDidMount() {
+    let options = JSON.parse(localStorage.getItem("options"));
+    if (options) {
+      this.setState(() => {
+        return { options };
+      });
+    }
+  }
+  componentDidUpdate() {
+    console.log("updated");
+    localStorage.setItem("options", JSON.stringify(this.state.options));
+  }
+  componentWillUnmount() {}
   removeOption(option) {
     this.setState((prevState) => {
       return { options: prevState.options.filter((elem) => elem !== option) };
@@ -35,7 +54,10 @@ class IndecisionApp extends React.Component {
   }
   handlePick() {
     let random = Math.floor(Math.random() * this.state.options.length);
-    alert(this.state.options[random]);
+
+    this.setState((previous) => {
+      return { selectedOption: previous.options[random] };
+    });
   }
   render() {
     let title = "Indecision App";
@@ -54,15 +76,19 @@ class IndecisionApp extends React.Component {
           removeOption={this.removeOption}
         />
         <AddOption addOption={this.addOption} />
+        <OptionalModal
+          isOpen={!!this.state.selectedOption}
+          closeModal={this.closeModal}
+        />
       </div>
     );
   }
 }
 const Header = (props) => {
   return (
-    <header>
-      <h1>{props.title}</h1>
-      <h2>{props.subtitle}</h2>
+    <header className="header">
+      <h1 className="header__title">{props.title}</h1>
+      <h2 className="header__subtitle">{props.subtitle}</h2>
     </header>
   );
 };
@@ -80,7 +106,9 @@ const Action = (props) => {
 const Options = (props) => {
   return (
     <div>
-      <button onClick={props.removeAllOptions}>Remove all</button>
+      <button onClick={props.removeAllOptions} className="red">
+        Remove all
+      </button>
       {props.options.map((elem) => (
         <Option
           key={elem}
@@ -141,7 +169,15 @@ class Counter extends React.Component {
     this.addOne = this.addOne.bind(this);
     this.removeOne = this.removeOne.bind(this);
     this.resetCounter = this.resetCounter.bind(this);
-    this.state = { counter: props.counter };
+    this.state = { counter: 0 };
+  }
+  componentDidMount() {
+    this.setState(() => {
+      return { counter: +localStorage.getItem("counter") };
+    });
+  }
+  componentDidUpdate() {
+    localStorage.setItem("counter", this.state.counter);
   }
   addOne() {
     this.setState((previous) => {
@@ -169,7 +205,7 @@ class Counter extends React.Component {
     );
   }
 }
-Counter.defaultProps = { counter: 0 };
+
 /////////////////////////////
 class Visiblity extends React.Component {
   constructor(props) {
@@ -196,3 +232,4 @@ class Visiblity extends React.Component {
 }
 const root = ReactDOM.createRoot(document.querySelector("#root"));
 root.render(<IndecisionApp />);
+export default IndecisionApp;
